@@ -16,13 +16,118 @@ const idStaffList = [];
 const teamMembers = [];
 
 const appMenu = () => {
+
+function buildTeam() { 
+
+}  
+
+function addIntern() {
+    inquirer.prompt([  
+        { 
+            type: 'input',
+            name: 'internName',
+            message: "What is the name of your intern? "
+        },  
+        { 
+            type: 'input',
+            name: 'internId',
+            message: "What is the ID of your intern? "
+        },
+        { 
+            type: 'input',
+            name: 'internEmail',
+            message: "What is the email of your intern? "
+        },
+        { 
+            type: 'input',
+            name: 'internSchool',
+            message: " What is the school attended by your intern? "
+        }
+    ]) .then(answers =>{
+        const intern = new Intern (answers.internName, answers.internId, answers.internEmail, answers.internSchool);               
+        teamMembers.push(intern);
+        idStaffList.push(answers.internId);
+        console.log(intern); 
+        createTeam();
+        });
+
+    }
+
+function addEngineer(){
+    inquirer.prompt([  
+            { 
+                type: 'input',
+                name: 'engineerName',
+                message: "What is the name of your engineer? "
+            },  
+            { 
+                type: 'input',
+                name: 'engineerId',
+                message: "What is the ID of your engineer? "
+            },
+            { 
+                type: 'input',
+                name: 'engineerEmail',
+                message: "What is the email of your engineer? "
+            },
+            { 
+                type: 'input',
+                name: 'engineerGithub',
+                message: " What is the Github's username of your engineer? "
+            }
+        ]) .then(answers =>{
+            const engineer = new Engineer(answers.engineerName,  answers.engineerId,   answers.engineerEmail, answers.engineerGithub); 
+            teamMembers.push(engineer);
+            idStaffList.push(answers.engineerId);
+            console.log(engineer); 
+            createTeam();
+            });
+            }
+
+
+
+
+// const appMenu = () => {
+    function createTeam(){
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'memberChoice',
+                message: "Which type of team member type would you like to add? ",
+                choices: [
+                    "Engineer",
+                    "Intern",
+                    "I don't want to add any more team members"
+                    ],
+                },
+            ])
+            .then(userChoice => {
+                if (userChoice.memberChoice === "Engineer"){
+                    // add engineer
+                    addEngineer();
+                    } else if (userChoice.memberChoice === "Intern"){
+                        // Ad Intern
+                        addIntern();
+                        } else {
+                            // build the team function
+                        buildTeam();
+                        }
+                    } )
+                    }
+
+                 
+                       
+              
+         
+  
+    
     function createManager(){
         console.log('Please build your working Team!');
         inquirer.prompt([
             {
                 type: 'input',
                 name: 'managerName',
-                message: "What is the team Manager's name? ",
+                message: "Kindly provide the Manager's name? ",   
                 validate: answer => {
                     if (answer !== ''){
                         return true;
@@ -49,12 +154,16 @@ const appMenu = () => {
         ])
         .then(answers => {
             const manager = new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.managerOfficeNumber);
+            console.log(manager);
             teamMembers.push(manager);
             idStaffList.push(answers.managerId);
-        })
+            createTeam();
+        });
         }
+    
         //create manager
         createManager();            
     }
 
     appMenu();
+    
