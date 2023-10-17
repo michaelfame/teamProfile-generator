@@ -8,7 +8,7 @@ const fs = require("fs");
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
-const render = require("./src/page-template.js");
+const render = require("./src/page-template");
 
 
 // TODO: Write Code to gather information about the development team members, and render the HTML file.
@@ -16,10 +16,18 @@ const idStaffList = [];
 const teamMembers = [];
 
 const appMenu = () => {
-
+    
 function buildTeam() { 
+    function buildTeam() {
+        if(!fs.existsSync(OUTPUT_DIR)) {
+            fs.mkdirSync(OUTPUT_DIR)
+        }
+        fs.writeFileSync(outputPath, render(teamMembers), 'utf-8');
+    }
+}
+    
 
-}  
+  
 
 function addIntern() {
     inquirer.prompt([  
@@ -85,9 +93,6 @@ function addEngineer(){
             }
 
 
-
-
-// const appMenu = () => {
     function createTeam(){
         inquirer.prompt([
             {
@@ -112,15 +117,11 @@ function addEngineer(){
                             // build the team function
                         buildTeam();
                         }
-                    } )
+                    } );
                     }
-
-                 
-                       
-              
-         
-  
-    
+                              
+                  
+      
     function createManager(){
         console.log('Please build your working Team!');
         inquirer.prompt([
@@ -131,8 +132,9 @@ function addEngineer(){
                 validate: answer => {
                     if (answer !== ''){
                         return true;
-                        } return "Please Enter the name of the Manager;"
-                }
+                        } 
+                        return "Please Enter the name of the Manager;"
+                },
                 },
               
               {
@@ -152,18 +154,17 @@ function addEngineer(){
               },
 
         ])
-        .then(answers => {
+        .then((answers) => {
             const manager = new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.managerOfficeNumber);
-            console.log(manager);
+            // console.log(manager);
             teamMembers.push(manager);
             idStaffList.push(answers.managerId);
             createTeam();
         });
         }
-    
+
         //create manager
         createManager();            
-    }
+    };
 
     appMenu();
-    
